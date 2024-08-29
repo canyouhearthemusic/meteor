@@ -14,35 +14,12 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'dob',
-        'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'dob' => 'date:Y-m-d',
     ];
 
     public function getJWTIdentifier()
@@ -59,6 +36,13 @@ class User extends Authenticatable implements JWTSubject
     {
         return Attribute::set(
             fn(string $value) => bcrypt($value)
+        );
+    }
+
+    protected function avatar(): Attribute
+    {
+        return Attribute::get(
+            fn(string $avatar) => url('/') . '/storage/' . $avatar
         );
     }
 }

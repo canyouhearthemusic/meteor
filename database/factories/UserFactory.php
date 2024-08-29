@@ -23,7 +23,6 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             // 'email_verified_at' => now(),
             'password' => 'Password123',
-            'dob' => fake()->date(),
         ];
     }
 
