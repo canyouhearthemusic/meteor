@@ -44,7 +44,9 @@ class User extends Authenticatable implements JWTSubject
     protected function avatar(): Attribute
     {
         return Attribute::get(
-            fn(string $avatar) => url('/') . '/storage/' . $avatar
+            fn(string $avatar) => is_null($avatar) || empty($avatar)
+                ? ''
+                : url('/') . '/storage/' . $avatar
         );
     }
 }
