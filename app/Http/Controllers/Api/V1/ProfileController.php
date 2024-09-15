@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\V1;
+namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdateRequest;
-use App\Models\User;
 use Illuminate\Http\Request;
 
-
-class ProfileController extends Controller
+class ProfileController extends ApiController
 {
     public function __construct()
     {
@@ -61,13 +58,13 @@ class ProfileController extends Controller
             $request->user()->update($credentials);
         } catch (\Exception $e) {
             return response()->json([
-                "message" => "Failed to update credentials",
-                "error" => $e->getMessage()
+                'message' => 'Failed to update credentials',
+                'error' => $e->getMessage(),
             ], 500);
         }
 
         return response()->json([
-            "message" => "Profile updated successfully"
+            'message' => 'Profile updated successfully',
         ], 200);
     }
 
