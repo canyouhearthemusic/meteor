@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\V1;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Book\StoreRequest;
 use App\Http\Requests\Book\UpdateRequest;
 use App\Models\Book;
+use App\Policies\V1\BookPolicy;
 use Illuminate\Http\Request;
 
-class BookController extends Controller
+class BookController extends ApiController
 {
+    protected $policyClass = BookPolicy::class;
 
     public function __construct()
     {
@@ -19,9 +21,11 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        return Book::where('user_id', auth()->id())->cursorPaginate();
+        $books = Book::where('user_id', auth()->id())->cursorPaginate();
+
+        return $this->okPagination('', $books);
     }
 
     /**
@@ -34,9 +38,7 @@ class BookController extends Controller
 
         Book::create($data);
 
-        return response()->json([
-            'message' => 'Book created successfully'
-        ]);
+        $this->created('Книга успешно создана!');
     }
 
     /**
@@ -45,11 +47,13 @@ class BookController extends Controller
     public function show(string $id)
     {
         try {
-            return Book::findOrFail($id)->where('user_id', auth()->id());
+            $book = Book::findOrFail($id);
+
+            $this->isAble('view', $book);
+
+            return $this->ok('', $book);
         } catch (\Throwable $th) {
-            return response()->json([
-                'error' => $th->getMessage()
-            ]);
+            return $this->error($th->getMessage(), 404);
         }
     }
 
@@ -62,16 +66,15 @@ class BookController extends Controller
         $data['user_id'] = auth()->id();
 
         try {
-            $book = Book::findOrFail($id)->where('user_id', auth()->id());
+            $book = Book::findOrFail($id);
+
+            $this->isAble('update', $book);
+
             $book->update($data);
-            
-            return response()->json([
-                'message' => 'Book updated successfully'
-            ]);
+
+            return $this->ok('Книга была успешно обновлена!', null);
         } catch (\Throwable $th) {
-            return response()->json([
-                'error' => $th->getMessage()
-            ]);
+            return $this->error($th->getMessage(), 404);
         }
     }
 
@@ -81,17 +84,15 @@ class BookController extends Controller
     public function destroy(string $id)
     {
         try {
-            $book = Book::where('user_id', auth()->id())->where('id', $id)->first();
-            
+            $book = Book::findOrFail($id);
+
+            $this->isAble('delete', $book);
+
             $book->deleteOrFail();
 
-            return response()->json([
-                'message' => 'Book deleted successfully'
-            ]);
+            return $this->ok('Книга была успшено удалена!', null);
         } catch (\Throwable $th) {
-            return response()->json([
-                'error' => $th->getMessage()
-            ]);
+            return $this->error($th->getMessage(), 404);
         }
     }
 }
