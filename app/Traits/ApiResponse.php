@@ -21,11 +21,11 @@ trait ApiResponse
         return $this->success($message, $data);
     }
 
-    protected function okPagination(string $message, CursorPaginator $data): JsonResponse
+    protected function okPagination(string $message, mixed $data): JsonResponse
     {
         $newData = [
             'message' => $message,
-            ...$data->toArray(),
+            'data' => $data,
         ];
 
 

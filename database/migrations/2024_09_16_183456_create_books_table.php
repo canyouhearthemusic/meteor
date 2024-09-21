@@ -12,13 +12,20 @@ return new class extends Migration {
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('user_id')->references('id')->on('users');
             $table->string('name');
             $table->string('author');
-            $table->integer('length')->nullable();
+            $table->foreignId('book_type_id')->nullable()->references('id')->on('book_types');
+            $table->foreignId('book_status_id')->nullable()->references('id')->on('book_statuses');
+            $table->unsignedInteger('total_duration')->nullable();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
-            $table->string('published_at')->nullable();
+            $table->date('planning_date')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->float('rating', 2, 1)->nullable();
+            $table->text('review')->nullable();
+            $table->unsignedTinyInteger('avg_emoji')->nullable();
             $table->timestamps();
         });
     }
