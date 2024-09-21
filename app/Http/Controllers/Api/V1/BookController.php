@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Book\StoreRequest;
 use App\Http\Requests\Book\UpdateRequest;
+use App\Http\Resources\BookResource;
 use App\Models\Book;
 use App\Policies\V1\BookPolicy;
-use Illuminate\Http\Request;
 
 class BookController extends ApiController
 {
@@ -25,7 +24,7 @@ class BookController extends ApiController
     {
         $books = Book::where('user_id', auth()->id())->cursorPaginate();
 
-        return $this->okPagination('', $books);
+        return $this->okPagination('', BookResource::collection($books));
     }
 
     /**
@@ -38,7 +37,7 @@ class BookController extends ApiController
 
         Book::create($data);
 
-        $this->created('Книга успешно создана!');
+        return $this->created('Книга успешно создана!');
     }
 
     /**
@@ -51,7 +50,7 @@ class BookController extends ApiController
 
             $this->isAble('view', $book);
 
-            return $this->ok('', $book);
+            return $this->ok('', new BookResource($book));
         } catch (\Throwable $th) {
             return $this->error($th->getMessage(), 404);
         }
@@ -90,7 +89,7 @@ class BookController extends ApiController
 
             $book->deleteOrFail();
 
-            return $this->ok('Книга была успшено удалена!', null);
+            return $this->ok('Книга была успешно удалена!', null);
         } catch (\Throwable $th) {
             return $this->error($th->getMessage(), 404);
         }
