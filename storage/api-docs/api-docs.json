@@ -1,0 +1,513 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "WitMeAPI Documentation",
+        "description": "WitMe API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Логин",
+                "description": "Логин",
+                "operationId": "a7997e7c1e3bfed64d4e56de82415931",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMjA3LjE1NC4yMTYuMTQvYXBpL3YxL2F1dGgvcmVnaXN0ZXIiLCJpYXQiOjE3MjgxNjA2ODIsImV4cCI6MTcyODE2NjY4MiwibmJmIjoxNzI4MTYwNjgyLCJqdGkiOiJFeXJKb05yNXhFdWZpaVV5Iiwic3ViIjoiOSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.NkCVbpCtawv5lAjXmVLcRdwzYgpmhJ1FbhV1acSRKEE"
+                                        },
+                                        "expires_in": {
+                                            "type": "integer",
+                                            "example": "6000"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Регистрация",
+                "description": "Регистрация",
+                "operationId": "b9e746d77661fb8df55d0ac63e1ece77",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMjA3LjE1NC4yMTYuMTQvYXBpL3YxL2F1dGgvcmVnaXN0ZXIiLCJpYXQiOjE3MjgxNjA2ODIsImV4cCI6MTcyODE2NjY4MiwibmJmIjoxNzI4MTYwNjgyLCJqdGkiOiJFeXJKb05yNXhFdWZpaVV5Iiwic3ViIjoiOSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.NkCVbpCtawv5lAjXmVLcRdwzYgpmhJ1FbhV1acSRKEE"
+                                        },
+                                        "expires_in": {
+                                            "type": "integer",
+                                            "example": "6000"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/auth/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Выйти",
+                "description": "Выйти",
+                "operationId": "f6b8957b4c0b25636613a9f0512a8ba9",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Рефреш",
+                "description": "Рефреш",
+                "operationId": "c42c3cd7fd7fe0dbd5bcc42962059e90",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMjA3LjE1NC4yMTYuMTQvYXBpL3YxL2F1dGgvcmVnaXN0ZXIiLCJpYXQiOjE3MjgxNjA2ODIsImV4cCI6MTcyODE2NjY4MiwibmJmIjoxNzI4MTYwNjgyLCJqdGkiOiJFeXJKb05yNXhFdWZpaVV5Iiwic3ViIjoiOSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.NkCVbpCtawv5lAjXmVLcRdwzYgpmhJ1FbhV1acSRKEE"
+                                        },
+                                        "expires_in": {
+                                            "type": "integer",
+                                            "example": "6000"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/books": {
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Cписок книг",
+                "description": "Получить список книг",
+                "operationId": "30d0f16bd282fe01ab6003ea2e4ecfa5",
+                "responses": {
+                    "200": {
+                        "description": "Cписок книг",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/BookResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Создать книгу",
+                "description": "Создать книгу",
+                "operationId": "bcce5e60e099761886fb7d30818bdf81",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreBookRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/books/{id}": {
+            "post": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Редактировать книгу",
+                "description": "Редактировать книгу",
+                "operationId": "25bd8ff972ed20f58f1aaf81badee359",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateBookRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/profile/update": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Обновить профиль",
+                "description": "Обновить профиль",
+                "operationId": "93b74270044df24a0d6db14b1bd076d5",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "StoreBookRequest": {
+                "required": [
+                    "name",
+                    "author",
+                    "book_type_id",
+                    "book_status_id"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Название книги",
+                        "type": "string"
+                    },
+                    "author": {
+                        "description": "Имя автора",
+                        "type": "string"
+                    },
+                    "total_duration": {
+                        "description": "Длительность/Кол-во страниц",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Описание книги",
+                        "type": "string"
+                    },
+                    "image": {
+                        "description": "Фото обложки",
+                        "type": "string"
+                    },
+                    "book_type_id": {
+                        "description": "Тип книги",
+                        "type": "integer"
+                    },
+                    "book_status_id": {
+                        "description": "Статус книги",
+                        "type": "integer"
+                    },
+                    "planning_date": {
+                        "description": "Дата планируемого читания",
+                        "type": "string"
+                    },
+                    "start_date": {
+                        "description": "Дата начала читания",
+                        "type": "string"
+                    },
+                    "end_date": {
+                        "description": "Дата конца читания",
+                        "type": "string"
+                    },
+                    "rating": {
+                        "description": "Оценка книги",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "review": {
+                        "description": "Отзыв",
+                        "type": "string"
+                    },
+                    "avg_emoji": {
+                        "description": "Эмодзи",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateBookRequest": {
+                "properties": {
+                    "name": {
+                        "description": "Название книги",
+                        "type": "string",
+                        "example": "skibidi"
+                    },
+                    "author": {
+                        "description": "Автор книги",
+                        "type": "string"
+                    },
+                    "total_duration": {
+                        "description": "Длительность/кол-во книги",
+                        "type": "integer"
+                    },
+                    "description": {
+                        "description": "Описание книги",
+                        "type": "string"
+                    },
+                    "image": {
+                        "description": "Обложка книги",
+                        "type": "string"
+                    },
+                    "book_type_id": {
+                        "description": "ID тип книги",
+                        "type": "integer"
+                    },
+                    "book_status_id": {
+                        "description": "ID статус книги",
+                        "type": "integer"
+                    },
+                    "planning_date": {
+                        "description": "Планируемая дата чтения",
+                        "type": "string"
+                    },
+                    "start_date": {
+                        "description": "Дата начала чтения",
+                        "type": "string"
+                    },
+                    "end_date": {
+                        "description": "Дата конец чтения",
+                        "type": "integer"
+                    },
+                    "rating": {
+                        "description": "Оценка",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "review": {
+                        "description": "Отзыв",
+                        "type": "string"
+                    },
+                    "avg_emoji": {
+                        "description": "Эмодзи",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "LoginUserRequest": {
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "description": "Почта",
+                        "type": "string"
+                    },
+                    "password": {
+                        "description": "Пароль",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "RegisterUserRequest": {
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "description": "Почта",
+                        "type": "string"
+                    },
+                    "password": {
+                        "description": "Пароль",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateUserRequest": {
+                "properties": {
+                    "name": {
+                        "description": "Имя",
+                        "type": "string"
+                    },
+                    "avatar": {
+                        "description": "Аватар",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "BookResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "author": {
+                        "type": "string"
+                    },
+                    "book_type": {
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "book_status": {
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "total_duration": {
+                        "type": "integer"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
+                    },
+                    "planning_date": {
+                        "type": "string"
+                    },
+                    "start_date": {
+                        "type": "string"
+                    },
+                    "end_date": {
+                        "type": "integer"
+                    },
+                    "rating": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "review": {
+                        "type": "string"
+                    },
+                    "avg_emoji": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Books",
+            "description": "Books"
+        },
+        {
+            "name": "Profile",
+            "description": "Profile"
+        }
+    ]
+}

@@ -5,6 +5,22 @@ namespace App\Http\Requests\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
+/**
+ * @OA\Schema(
+ *     schema="LoginUserRequest",
+ *     required={"email", "password"},
+ *     @OA\Property(
+ *         property="email",
+ *         type="string",
+ *         description="Почта"
+ *     ),
+ *     @OA\Property(
+ *         property="password",
+ *         type="string",
+ *         description="Пароль"
+ *     )
+ * ),
+ */
 class LoginRequest extends FormRequest
 {
     /**
@@ -23,7 +39,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email', 'exists:users,email'],
+            'email'    => ['required', 'email', 'exists:users,email'],
             'password' => [
                 'required',
                 'string',
