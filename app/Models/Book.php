@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Table: books
@@ -31,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * === Relationships ===
  * @property-read \App\Models\BookType|null $type
  * @property-read \App\Models\BookStatus|null $status
+ * @property-read \App\Models\BookSession[]|\Illuminate\Database\Eloquent\Collection $sessions
  */
 class Book extends Model
 {
@@ -47,5 +49,10 @@ class Book extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(BookStatus::class, 'book_status_id');
+    }
+
+    public function sessions(): HasMany
+    {
+        return $this->hasMany(BookSession::class, 'book_id');
     }
 }

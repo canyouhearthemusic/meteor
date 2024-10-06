@@ -10,18 +10,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     @OA\Property(property="id",type="integer"),
  *     @OA\Property(property="name",type="string"),
  *     @OA\Property(property="author",type="string"),
- *     @OA\Property(
- *         property="book_type",
- *         type="object",
- *         @OA\Property(property="id",type="integer"),
- *         @OA\Property(property="name",type="string")
- *     ),
- *     @OA\Property(
- *         property="book_status",
- *         type="object",
- *         @OA\Property(property="id",type="integer"),
- *         @OA\Property(property="name",type="string")
- *     ),
+ *     @OA\Property(property="book_type",type="string"),
+ *     @OA\Property(property="book_status",type="string"),
  *     @OA\Property(property="total_duration",type="integer"),
  *     @OA\Property(property="description",type="string"),
  *     @OA\Property(property="image",type="string"),
@@ -33,6 +23,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     @OA\Property(property="avg_emoji",type="integer"),
  * )
  *
+ * @property \App\Models\Book $resource
  */
 class BookResource extends JsonResource
 {
@@ -47,8 +38,8 @@ class BookResource extends JsonResource
             'id'             => $this->resource->id,
             'name'           => $this->resource->name,
             'author'         => $this->resource->author,
-            'book_type'      => $this->resource->type,
-            'book_status'    => $this->resource->status,
+            'book_type'      => $this->resource->type->name,
+            'book_status'    => $this->resource->status->name,
             'total_duration' => $this->resource->total_duration,
             'description'    => $this->resource->description,
             'image'          => $this->resource->image,
