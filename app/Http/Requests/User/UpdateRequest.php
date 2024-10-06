@@ -4,6 +4,21 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     schema="UpdateUserRequest",
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
+ *         description="Имя"
+ *     ),
+ *     @OA\Property(
+ *         property="avatar",
+ *         type="binary",
+ *         description="Аватар"
+ *     )
+ * ),
+ */
 class UpdateRequest extends FormRequest
 {
     /**
@@ -22,7 +37,8 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['min:2', 'max:100', 'nullable'],
+            'name'   => ['nullable', 'min:2', 'max:100'],
+            'avatar' => ['nullable', 'image'],
         ];
     }
 }

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
 
+/**
+ * @OA\Info(version="1.0.0",description="WitMe API",title="WitMeAPI Documentation")
+ */
 class ApiController extends Controller
 {
     use ApiResponse;

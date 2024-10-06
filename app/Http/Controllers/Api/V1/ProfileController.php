@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\User\UpdateRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends ApiController
 {
@@ -37,35 +38,49 @@ class ProfileController extends ApiController
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Post (
+     *     path="/api/v1/profile/update",
+     *     tags={"Profile"},
+     *     summary="Обновить профиль",
+     *     description="Обновить профиль",
+     *
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(ref="#/components/schemas/UpdateUserRequest")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *     ),
+     *
+     *     security={{
+     *         "bearer":{}
+     *     }}
+     * )
      */
     public function update(UpdateRequest $request)
     {
-        $credentials = $request->validated();
-
-        if (isset($credentials['password'])) {
-            $credentials['password'] = bcrypt($credentials['password']);
-        }
-
-        if ($request->hasFile('avatar')) {
-            $filename = generate_filename('avatar', $request->file('avatar'));
-            $path = $request->file('avatar')->storeAs('avatars', $filename, 'public');
-
-            $credentials['avatar'] = $path;
-        }
-
         try {
-            $request->user()->update($credentials);
+            DB::transaction(function () use ($request) {
+                $credentials = $request->validated();
+
+                if ($request->hasFile('avatar')) {
+                    $filename = generate_filename('avatar', $request->file('avatar'));
+                    $path     = $request->file('avatar')->storeAs('avatars', $filename, 'public');
+
+                    $credentials['avatar'] = $path;
+                }
+
+                $request->user()->update($credentials);
+            });
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Failed to update credentials',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->error($e->getMessage(), 500);
         }
 
-        return response()->json([
-            'message' => 'Profile updated successfully',
-        ], 200);
+        return $this->ok('Профиль успешно обновлен!', null);
     }
 
     /**

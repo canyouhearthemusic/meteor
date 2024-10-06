@@ -18,7 +18,26 @@ class BookController extends ApiController
     }
 
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/books",
+     *     tags={"Books"},
+     *     summary="Cписок книг",
+     *     description="Получить список книг",
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Cписок книг",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="data",
+     *                     ref="#/components/schemas/BookResource"
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
      */
     public function index()
     {
@@ -28,11 +47,28 @@ class BookController extends ApiController
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/books",
+     *     tags={"Books"},
+     *     summary="Создать книгу",
+     *     description="Создать книгу",
+     *
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(ref="#/components/schemas/StoreBookRequest")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="OK"
+     *     )
+     * )
      */
     public function store(StoreRequest $request)
     {
-        $data = $request->validated();
+        $data            = $request->validated();
         $data['user_id'] = auth()->id();
 
         Book::create($data);
@@ -57,16 +93,32 @@ class BookController extends ApiController
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Post(
+     *     path="/books/{id}",
+     *     tags={"Books"},
+     *     summary="Редактировать книгу",
+     *     description="Редактировать книгу",
+     *
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(ref="#/components/schemas/UpdateBookRequest")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="OK"
+     *     )
+     * )
      */
     public function update(UpdateRequest $request, string $id)
     {
-        $data = $request->validated();
+        $data            = $request->validated();
         $data['user_id'] = auth()->id();
 
         try {
-            $book = Book::findOrFail($id);
-
+            $book = Book::query()->findOrFail($id);
             $this->isAble('update', $book);
 
             $book->update($data);
