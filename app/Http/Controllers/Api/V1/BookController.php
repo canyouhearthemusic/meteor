@@ -19,7 +19,7 @@ class BookController extends ApiController
 
     /**
      * @OA\Get(
-     *     path="/books",
+     *     path="/api/v1/books",
      *     tags={"Books"},
      *     summary="Cписок книг",
      *     description="Получить список книг",
@@ -48,7 +48,7 @@ class BookController extends ApiController
 
     /**
      * @OA\Post(
-     *     path="/books",
+     *     path="/api/v1/books",
      *     tags={"Books"},
      *     summary="Создать книгу",
      *     description="Создать книгу",
@@ -77,7 +77,33 @@ class BookController extends ApiController
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/v1/books/{id}",
+     *     tags={"Books"},
+     *     summary="Cписок книг",
+     *     description="Получить список книг",
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Cписок книг",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="data",
+     *                     ref="#/components/schemas/BookResource"
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
      */
     public function show(string $id)
     {
@@ -94,10 +120,17 @@ class BookController extends ApiController
 
     /**
      * @OA\Post(
-     *     path="/books/{id}",
+     *     path="/api/v1/books/{id}",
      *     tags={"Books"},
      *     summary="Редактировать книгу",
      *     description="Редактировать книгу",
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
      *
      *     @OA\RequestBody(
      *         @OA\MediaType(
@@ -130,7 +163,24 @@ class BookController extends ApiController
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/v1/books/{id}",
+     *     tags={"Books"},
+     *     summary="Удалить книгу",
+     *     description="Удалить книгу",
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="OK"
+     *     )
+     * )
      */
     public function destroy(string $id)
     {

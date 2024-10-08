@@ -155,14 +155,14 @@
                 ]
             }
         },
-        "/books": {
+        "/api/v1/books": {
             "get": {
                 "tags": [
                     "Books"
                 ],
                 "summary": "Cписок книг",
                 "description": "Получить список книг",
-                "operationId": "30d0f16bd282fe01ab6003ea2e4ecfa5",
+                "operationId": "61b0fdd35b8c14afc6e29eb90598649a",
                 "responses": {
                     "200": {
                         "description": "Cписок книг",
@@ -187,7 +187,7 @@
                 ],
                 "summary": "Создать книгу",
                 "description": "Создать книгу",
-                "operationId": "bcce5e60e099761886fb7d30818bdf81",
+                "operationId": "5df8eb3d652dcc56b60cd15be3cbbf85",
                 "requestBody": {
                     "content": {
                         "multipart/form-data": {
@@ -204,14 +204,59 @@
                 }
             }
         },
-        "/books/{id}": {
+        "/api/v1/books/{id}": {
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Cписок книг",
+                "description": "Получить список книг",
+                "operationId": "c5b00bf4246c67b18e3092bd3665ea29",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cписок книг",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/BookResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Books"
                 ],
                 "summary": "Редактировать книгу",
                 "description": "Редактировать книгу",
-                "operationId": "25bd8ff972ed20f58f1aaf81badee359",
+                "operationId": "e9e7186a14d97ce57f6f581ad4a475bd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "multipart/form-data": {
@@ -221,6 +266,29 @@
                         }
                     }
                 },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Удалить книгу",
+                "description": "Удалить книгу",
+                "operationId": "0d28c2ad15a8fdbe85c2c95806b007f6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -256,6 +324,53 @@
                     }
                 ]
             }
+        },
+        "/api/v1/books/{bookId}/sessions": {
+            "post": {
+                "tags": [
+                    "Book Sessions"
+                ],
+                "summary": "Создать сессию книги",
+                "description": "Создать сессию книги",
+                "operationId": "5a6869ed9201aeb84480111f4edcc9e4",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreBookSessionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid"
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -286,7 +401,7 @@
                     },
                     "image": {
                         "description": "Фото обложки",
-                        "type": "string"
+                        "type": "binary"
                     },
                     "book_type_id": {
                         "description": "Тип книги",
@@ -328,8 +443,7 @@
                 "properties": {
                     "name": {
                         "description": "Название книги",
-                        "type": "string",
-                        "example": "skibidi"
+                        "type": "string"
                     },
                     "author": {
                         "description": "Автор книги",
@@ -345,7 +459,7 @@
                     },
                     "image": {
                         "description": "Обложка книги",
-                        "type": "string"
+                        "type": "binary"
                     },
                     "book_type_id": {
                         "description": "ID тип книги",
@@ -379,6 +493,35 @@
                     "avg_emoji": {
                         "description": "Эмодзи",
                         "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreBookSessionRequest": {
+                "required": [
+                    "session_duration"
+                ],
+                "properties": {
+                    "session_duration": {
+                        "description": "Длительность сессии (в секундах)",
+                        "type": "integer"
+                    },
+                    "current_duration": {
+                        "description": "Страниц прочитано/Секунд прослушано книги",
+                        "type": "integer"
+                    },
+                    "notes": {
+                        "description": "Заметки сесии книги",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "comment": {
+                                    "type": "string",
+                                    "example": "Sigma"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -425,7 +568,7 @@
                     },
                     "avatar": {
                         "description": "Аватар",
-                        "type": "string"
+                        "type": "binary"
                     }
                 },
                 "type": "object"
@@ -442,26 +585,10 @@
                         "type": "string"
                     },
                     "book_type": {
-                        "properties": {
-                            "id": {
-                                "type": "integer"
-                            },
-                            "name": {
-                                "type": "string"
-                            }
-                        },
-                        "type": "object"
+                        "type": "string"
                     },
                     "book_status": {
-                        "properties": {
-                            "id": {
-                                "type": "integer"
-                            },
-                            "name": {
-                                "type": "string"
-                            }
-                        },
-                        "type": "object"
+                        "type": "string"
                     },
                     "total_duration": {
                         "type": "integer"
@@ -508,6 +635,10 @@
         {
             "name": "Profile",
             "description": "Profile"
+        },
+        {
+            "name": "Book Sessions",
+            "description": "Book Sessions"
         }
     ]
 }

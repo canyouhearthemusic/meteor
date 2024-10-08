@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\BookController;
 use App\Http\Controllers\Api\V1\ProfileController;
+use App\Http\Controllers\Api\V1\SessionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,10 +34,19 @@ Route::prefix('/profile')
         Route::post('/update', 'update')->name('update');
     });
 
-Route::prefix('/books')->name('books.')->controller(BookController::class)->group(function () {
-    Route::get('/', 'index')->name('index');
-    Route::post('/', 'store')->name('store');
-    Route::get('/{id}', 'show')->name('show');
-    Route::post('/{id}', 'update')->name('update');
-    Route::delete('/{id}', 'destroy')->name('destroy');
+Route::prefix('/books')->name('books.')->group(function () {
+    Route::controller(BookController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}', 'show')->name('show');
+        Route::post('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+    Route::prefix('/{book}/sessions')
+        ->name('sessions.')
+        ->controller(SessionController::class)
+        ->group(function () {
+            Route::post('/', 'store')->name('store');
+        });
 });
