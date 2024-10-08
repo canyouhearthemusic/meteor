@@ -324,6 +324,53 @@
                     }
                 ]
             }
+        },
+        "/api/v1/books/{bookId}/sessions": {
+            "post": {
+                "tags": [
+                    "Book Sessions"
+                ],
+                "summary": "Создать сессию книги",
+                "description": "Создать сессию книги",
+                "operationId": "5a6869ed9201aeb84480111f4edcc9e4",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreBookSessionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid"
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -450,6 +497,35 @@
                 },
                 "type": "object"
             },
+            "StoreBookSessionRequest": {
+                "required": [
+                    "session_duration"
+                ],
+                "properties": {
+                    "session_duration": {
+                        "description": "Длительность сессии (в секундах)",
+                        "type": "integer"
+                    },
+                    "current_duration": {
+                        "description": "Страниц прочитано/Секунд прослушано книги",
+                        "type": "integer"
+                    },
+                    "notes": {
+                        "description": "Заметки сесии книги",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "comment": {
+                                    "type": "string",
+                                    "example": "Sigma"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "LoginUserRequest": {
                 "required": [
                     "email",
@@ -559,6 +635,10 @@
         {
             "name": "Profile",
             "description": "Profile"
+        },
+        {
+            "name": "Book Sessions",
+            "description": "Book Sessions"
         }
     ]
 }

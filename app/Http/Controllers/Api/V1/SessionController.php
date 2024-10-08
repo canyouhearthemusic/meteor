@@ -13,6 +13,49 @@ class SessionController extends ApiController
         $this->middleware('auth:api');
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/books/{bookId}/sessions",
+     *     tags={"Book Sessions"},
+     *     summary="Создать сессию книги",
+     *     description="Создать сессию книги",
+     *
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/StoreBookSessionRequest")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="OK",
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="422",
+     *         description="Unprocessable Content",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="The given data was invalid"
+     *             ),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 example={}
+     *             )
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="500",
+     *         description="Something went wrong"
+     *      ),
+     * )
+     */
     public function store(StoreRequest $request, Book $book)
     {
         $data = $request->validated();
@@ -36,6 +79,6 @@ class SessionController extends ApiController
             return $this->ok('OK', null);
 
         } catch (\Exception $e) {
-            return $this->error('Ошибка при создании сесии: ' . $e->getMessage(), 500);
+            return $this->error('Ошибка при создании сесcии: ' . $e->getMessage(), 500);
         }
     }}

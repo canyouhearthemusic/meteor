@@ -4,6 +4,30 @@ namespace App\Http\Requests\BookSession;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     schema="StoreBookSessionRequest",
+ *     required={"session_duration"},
+ *     @OA\Property(
+ *         property="session_duration",
+ *         type="integer",
+ *         description="Длительность сессии (в секундах)"
+ *     ),
+ *     @OA\Property(
+ *         property="current_duration",
+ *         type="integer",
+ *         description="Страниц прочитано/Секунд прослушано книги"
+ *     ),
+ *     @OA\Property(
+ *         property="notes",
+ *         type="array",
+ *         description="Заметки сесии книги",
+ *         @OA\Items(
+ *             @OA\Property(property="comment", type="string", example="Sigma"),
+ *         )
+ *     ),
+ * ),
+ */
 class StoreRequest extends FormRequest
 {
     /**
