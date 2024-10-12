@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
 
 /**
- * @OA\Info(version="1.0.0",description="WitMe API",title="WitMeAPI Documentation")
+ * @OA\Info(version="1.0.0",description="WitMe API",title="Witme API Documentation")
  */
 class ApiController extends Controller
 {
@@ -33,7 +33,7 @@ class ApiController extends Controller
     public function isAble($ability, $targetModel)
     {
         if (empty($this->policyClass)) {
-            throw new \Exception('Policy class are not set');
+            throw new \RuntimeException('Policy class are not set');
         }
 
         return $this->authorize($ability, [$targetModel, $this->policyClass]);

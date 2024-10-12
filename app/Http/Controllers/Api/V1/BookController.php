@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Requests\Book\StoreRequest;
 use App\Http\Requests\Book\UpdateRequest;
 use App\Http\Resources\BookResource;
+use App\Http\Resources\BooksResource;
 use App\Models\Book;
 use App\Policies\V1\BookPolicy;
+use Illuminate\Http\JsonResponse;
 
 class BookController extends ApiController
 {
@@ -32,18 +34,22 @@ class BookController extends ApiController
      *             @OA\Schema(
      *                 @OA\Property(
      *                     property="data",
-     *                     ref="#/components/schemas/BookResource"
+     *                     ref="#/components/schemas/BooksResource"
      *                 )
      *             )
      *         )
      *     )
      * )
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        $books = Book::where('user_id', auth()->id())->cursorPaginate();
+        $books = Book::query()
+            ->with(['notes'])
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->get();
 
-        return $this->okPagination('', BookResource::collection($books));
+        return $this->ok('', new BooksResource($books));
     }
 
     /**
@@ -66,12 +72,12 @@ class BookController extends ApiController
      *     )
      * )
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): JsonResponse
     {
         $data            = $request->validated();
         $data['user_id'] = auth()->id();
 
-        Book::create($data);
+        Book::query()->create($data);
 
         return $this->created('Книга успешно создана!');
     }
@@ -105,10 +111,12 @@ class BookController extends ApiController
      *     )
      * )
      */
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         try {
-            $book = Book::findOrFail($id);
+            $book = Book::query()
+                ->with(['sessions', 'sessions.notes', 'sessions.notes.files'])
+                ->findOrFail($id);
 
             $this->isAble('view', $book);
 
@@ -145,7 +153,7 @@ class BookController extends ApiController
      *     )
      * )
      */
-    public function update(UpdateRequest $request, string $id)
+    public function update(UpdateRequest $request, string $id): ?JsonResponse
     {
         $data            = $request->validated();
         $data['user_id'] = auth()->id();
@@ -182,10 +190,11 @@ class BookController extends ApiController
      *     )
      * )
      */
-    public function destroy(string $id)
+    public function destroy(string $id): ?JsonResponse
     {
         try {
-            $book = Book::findOrFail($id);
+            $book = Book::query()
+                ->findOrFail($id);
 
             $this->isAble('delete', $book);
 

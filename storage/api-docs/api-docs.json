@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "WitMeAPI Documentation",
+        "title": "Witme API Documentation",
         "description": "WitMe API",
         "version": "1.0.0"
     },
@@ -171,7 +171,7 @@
                                 "schema": {
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/components/schemas/BookResource"
+                                            "$ref": "#/components/schemas/BooksResource"
                                         }
                                     },
                                     "type": "object"
@@ -332,7 +332,7 @@
                 ],
                 "summary": "Создать сессию книги",
                 "description": "Создать сессию книги",
-                "operationId": "5a6869ed9201aeb84480111f4edcc9e4",
+                "operationId": "store",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -518,6 +518,13 @@
                                 "comment": {
                                     "type": "string",
                                     "example": "Sigma"
+                                },
+                                "files": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "file",
+                                        "example": "photo1.jpg"
+                                    }
                                 }
                             },
                             "type": "object"
@@ -593,6 +600,15 @@
                     "total_duration": {
                         "type": "integer"
                     },
+                    "notes_amount": {
+                        "type": "integer"
+                    },
+                    "notes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/NoteResource"
+                        }
+                    },
                     "description": {
                         "type": "string"
                     },
@@ -617,6 +633,52 @@
                     },
                     "avg_emoji": {
                         "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "BooksResource": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/BookResource"
+                }
+            },
+            "FileResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "path": {
+                        "type": "string"
+                    },
+                    "original_name": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "NoteResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "session_id": {
+                        "type": "string"
+                    },
+                    "comment": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string"
+                    },
+                    "files": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FileResource"
+                        }
                     }
                 },
                 "type": "object"

@@ -13,6 +13,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     @OA\Property(property="book_type",type="string"),
  *     @OA\Property(property="book_status",type="string"),
  *     @OA\Property(property="total_duration",type="integer"),
+ *     @OA\Property(property="notes_amount",type="integer"),
+ *     @OA\Property(
+ *         property="notes",
+ *         type="array",
+ *         @OA\Items(ref="#/components/schemas/NoteResource")
+ *     ),
  *     @OA\Property(property="description",type="string"),
  *     @OA\Property(property="image",type="string"),
  *     @OA\Property(property="planning_date",type="string"),
@@ -41,6 +47,8 @@ class BookResource extends JsonResource
             'book_type'      => $this->resource->type->name,
             'book_status'    => $this->resource->status->name,
             'total_duration' => $this->resource->total_duration,
+            'notes_amount'   => $this->resource->notes->count(),
+            'notes'          => NoteResource::collection($this->resource->notes),
             'description'    => $this->resource->description,
             'image'          => $this->resource->image,
             'planning_date'  => $this->resource->planning_date,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\User\UpdateRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -61,10 +62,10 @@ class ProfileController extends ApiController
      *     }}
      * )
      */
-    public function update(UpdateRequest $request)
+    public function update(UpdateRequest $request): JsonResponse
     {
         try {
-            DB::transaction(function () use ($request) {
+            DB::transaction(static function () use ($request) {
                 $credentials = $request->validated();
 
                 if ($request->hasFile('avatar')) {
