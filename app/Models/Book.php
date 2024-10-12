@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 /**
  * Table: books
@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \App\Models\BookType|null $type
  * @property-read \App\Models\BookStatus|null $status
  * @property-read \App\Models\BookSession[]|\Illuminate\Database\Eloquent\Collection $sessions
+ * @property-read \App\Models\Note[]|\Illuminate\Database\Eloquent\Collection $notes
  */
 class Book extends Model
 {
@@ -53,6 +54,11 @@ class Book extends Model
 
     public function sessions(): HasMany
     {
-        return $this->hasMany(BookSession::class, 'book_id');
+        return $this->hasMany(BookSession::class, 'book_id')->latest();
+    }
+
+    public function notes(): HasManyThrough
+    {
+        return $this->hasManyThrough(Note::class, BookSession::class, 'book_id', 'session_id')->latest();
     }
 }

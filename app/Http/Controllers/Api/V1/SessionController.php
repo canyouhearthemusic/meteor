@@ -4,10 +4,16 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\BookSession\StoreRequest;
 use App\Models\Book;
+use App\Models\BookSession;
+use App\Models\Note;
+use App\Policies\V1\BookPolicy;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
 class SessionController extends ApiController
 {
+    protected $policyClass = BookPolicy::class;
+
     public function __construct()
     {
         $this->middleware('auth:api');
@@ -19,6 +25,7 @@ class SessionController extends ApiController
      *     tags={"Book Sessions"},
      *     summary="Создать сессию книги",
      *     description="Создать сессию книги",
+     *     operationId="store",
      *
      *     @OA\RequestBody(
      *         @OA\MediaType(
@@ -56,24 +63,39 @@ class SessionController extends ApiController
      *      ),
      * )
      */
-    public function store(StoreRequest $request, Book $book)
+    public function store(StoreRequest $request, Book $book): ?JsonResponse
     {
         $data = $request->validated();
 
         try {
-            DB::transaction(function () use ($book, $data) {
-                /** @var \App\Models\BookSession $session */
+            DB::transaction(static function () use ($book, $data) {
+                /** @var BookSession $session */
                 $session = $book->sessions()->create([
-                    'book_id'          => $book->id,
                     'session_duration' => $data['session_duration'],
                     'current_duration' => $data['current_duration'],
                 ]);
 
-                foreach ($data['notes'] as $key => $note) {
-                    $data['notes'][$key]['session_id'] = $session->id;
-                }
+                foreach ($data['notes'] as $noteData) {
+                    /** @var Note $note */
+                    $note = $session->notes()->create([
+                        'comment' => $noteData['comment'],
+                    ]);
 
-                $session->notes()->createMany($data['notes']);
+                    if (!empty($noteData['files'])) {
+                        $filesData = [];
+
+                        foreach ($noteData['files'] as $file) {
+                            $path = $file->store('note-attachments');
+                            $filesData[] = [
+                                'original_name' => $file->getClientOriginalName(),
+                                'path'          => $path,
+                                'user_id'       => auth()->id(),
+                            ];
+                        }
+
+                        $note->files()->createMany($filesData);
+                    }
+                }
             });
 
             return $this->ok('OK', null);
@@ -81,4 +103,5 @@ class SessionController extends ApiController
         } catch (\Exception $e) {
             return $this->error('Ошибка при создании сесcии: ' . $e->getMessage(), 500);
         }
-    }}
+    }
+}
